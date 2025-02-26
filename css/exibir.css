@@ -150,7 +150,28 @@ button:hover {
 button:nth-child(1):hover {
     background-color: #0056b3;
 }
+.card {
+			font-size: 1.2em;
+			text-align: center;
+            width: 200px;
+            padding: 20px;
+            margin: 10px;
+            box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s;
+	color: #0c442c;
+        }
+		  .card:hover {
+            transform: scale(1.05);
+        }
 
+        .card a {
+            text-decoration: none;
+            color: #0c442c;
+            font-weight: bold;
+        }
+
+        .card a:hover {
+            color: #0c442c;
 button:nth-child(2):hover {
     background-color: #a71d2a;
 }
