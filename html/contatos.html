@@ -148,6 +148,16 @@
                 <label for="nome">Nome:</label>
                 <input type="text" id="nome" name="nome" placeholder="Digite o nome">
             </div>
+			  <div class="form-group">
+				<label for="funcao">Função:</label>
+                <select id="funcao" name="funcao">
+					<option value="" disabled selected>Selecione uma opção</option>
+					<option value="C1">Portal </option>
+					<option value="C1">Certificadora </option>
+					<option value="C1">API</option>
+					<option value="C1">Outros</option>
+					</SELECT>
+					</DIV>
 
 			<button type="submit">Enviar</button>
 			<button type="button" onclick="window.location.href='exibircont.html';">Voltar</button>
@@ -171,11 +181,12 @@
 				telefone: document.getElementById('telefone').value,
 				email: document.getElementById('email').value,
                 nome: document.getElementById('nome').value,
+				funcao: document.getElementById('funcao').value,
             };
 
             // Enviar dados para o Apps Script
             try {
-                const response = await fetch('https://script.google.com/macros/s/AKfycbyQp4FQRDbUKtiMI4ychYwgfDtD7oXMCS8x0cMAc0TBdQlMACf19ybIIyenJCATVDiwbg/exec', {
+                const response = await fetch('https://script.google.com/macros/s/AKfycbxVOdoa3Fjbqg-bC58LvnnM27gqh5ydtlLUDGWz8kCSiUrdkTK2bRxepjOfANHaSsFR/exec', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
                     body: new URLSearchParams(dados),
