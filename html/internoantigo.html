@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chamados</title>
+	<link rel="icon" type="logo1/png" href="../img/logo1.png">
+    <link rel="stylesheet" href="../css/exibir.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+<div class="titulo">
+    <img src="../img/logo2.png" alt="Logo" class="logo">
+    <h1>Chamados Interno</h1>
+    <button class="back-button" onclick="window.location.href='exibirint.html';">Voltar</button>
+</div>
+<div class="main-content">
+    <div class="filters">
+        <div class="filter-group">
+		<label for="responsavel">Filtrar por Responsável:</label>
+            <input type="text" id="responsavel" placeholder="Digite o responsável" oninput="applyFilters()">
+        </div>
+        <div class="filter-group">
+            <label for="sprint">Filtrar por Sprint:</label>
+            <input type="text" id="sprint" placeholder="Digite a sprint" oninput="applyFilters()">
+        </div>
+        <div class="filter-group">
+            <label for="servico">Filtrar por Serviço:</label>
+            <input type="text" id="servico" placeholder="Digite o serviço" oninput="applyFilters()">
+        </div>
+    </div>
+	
+    <div id="data"></div>
+</div>
+
+<script>
+    const sheetId = '1vzQ932VhryQLJV7j1aMYsOYLqBUKifJ_E9SKXrzbkD8'; // Substitua pelo ID da sua planilha
+    const apiKey = 'AIzaSyA-aZjrMoRGcyuIlO-RbtaaFOZRHA4YGww'; // Substitua pela sua chave de API
+    const range = 'InternoAntigo'; // Nome da aba ou intervalo exato
+    const apiUrl = `https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/${range}?key=${apiKey}`;
+    
+    let originalData = [];
+
+    fetch(apiUrl)
+        .then(response => response.json())
+        .then(data => {
+            if (data.values) {
+                originalData = data.values;
+                renderTable(originalData);
+            } else {
+                console.error('Nenhum dado encontrado na planilha.');
+            }
+        })
+        .catch(error => console.error('Erro ao buscar dados:', error));
+
+    function renderTable(data) {
+        let html = '<table>';
+        html += '<thead><tr>';
+        data[0].forEach(header => {
+            html += `<th>${header}</th>`;
+        });
+        html += '</tr></thead><tbody>';
+
+        data.slice(1).forEach(row => {
+            html += '<tr>';
+            row.forEach(cell => {
+                html += `<td>${cell || 'N/A'}</td>`;
+            });
+            html += '</tr>';
+        });
+
+        html += '</tbody></table>';
+        document.getElementById('data').innerHTML = html;
+    }
+
+    function applyFilters() {
+        const responsavelFilter = document.getElementById('responsavel').value.toLowerCase();
+        const sprintFilter = document.getElementById('sprint').value.toLowerCase();
+        const servicoFilter = document.getElementById('servico').value.toLowerCase();
+
+        const headers = originalData[0]; // Primeira linha contém os cabeçalhos
+        const responsavelIndex = headers.indexOf("Responsável");
+        const sprintIndex = headers.indexOf("Sprint");
+        const servicoIndex = headers.indexOf("Serviço");
+
+        const filteredData = originalData.filter((row, index) => {
+            if (index === 0) return true; // Mantém o cabeçalho
+            const responsavelMatches = responsavelFilter ? row[responsavelIndex]?.toLowerCase().includes(responsavelFilter) : true;
+            const sprintMatches = sprintFilter ? row[sprintIndex]?.toLowerCase().includes(sprintFilter) : true;
+            const servicoMatches = servicoFilter ? row[servicoIndex]?.toLowerCase().includes(servicoFilter) : true;
+            return responsavelMatches && sprintMatches && servicoMatches;
+        });
+
+        renderTable(filteredData);
+    }
+</script>
+</body>
+</html>
