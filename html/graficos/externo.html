@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gráficos</title>
+  	    <link rel="icon" type="logo1/png" href="../../img/logo1.png">
+  <link rel="stylesheet" href="../../css/exibir.css">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+ 
+</head>
+<body>
+  <div class="titulo">
+    <img src="../../img/logo2.png" alt="Logo" class="logo">
+    <h1>Gráficos</h1>
+    <button class="back-button" onclick="window.location.href='../../index.html';">Voltar</button>
+  </div>
+
+  <!-- Menu de navegação -->
+<div class="menu11">
+     <div class="op">
+  <a href="total.html">Total de Chamados</a>
+</div>
+
+        <div class="op">
+            <a href="externoxinterno.html">Externo x Interno</a>
+        </div>
+        <div class="op">
+            <a href="responsavel.html">Responsável</a>
+        </div>
+        <div class="op selected">
+            <a href="externo.html">Externo - Serviço</a>
+        </div>
+        <div class="op">
+            <a href="interno.html">Interno - Sistemas</a>
+        </div>
+</div>
+
+  <div class="main-content1" id="externo-servico">
+    <canvas id="chart"></canvas>
+  </div>
+
+  <script>
+    const sheetId = '1vzQ932VhryQLJV7j1aMYsOYLqBUKifJ_E9SKXrzbkD8';
+    const apiKey = 'AIzaSyA-aZjrMoRGcyuIlO-RbtaaFOZRHA4YGww';
+    const range = 'Externo';
+    const apiUrl = `https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/${range}?key=${apiKey}`;
+
+    const fixedColors = {
+      "Acesso ao Portal": "#172A3A",
+      "Certificadora": "#228C6E",
+      "Subida de Operação": "#F7B801",
+      "Portal (Dúvidas)": "#F18701",
+      "Apresentação do Portal": "#F69200",
+      "Arquivos": "#76B041",
+      "Outros": "#545c34",
+      "Homologação": "#944317"
+    };
+
+    fetch(apiUrl)
+      .then(response => response.json())
+      .then(data => {
+        if (data.values) {
+          renderChart(data.values);
+        } else {
+          console.error('Nenhum dado encontrado na planilha.');
+        }
+      })
+      .catch(error => console.error('Erro ao buscar dados:', error));
+
+    function renderChart(data) {
+      const headers = data[0];
+      const sprintIndex = headers.indexOf("Sprint");
+      const servicoIndex = headers.indexOf("Serviço"); // ou ajuste conforme o nome certo
+
+      const counts = {};
+
+      data.slice(1).forEach(row => {
+        const sprint = row[sprintIndex];
+        const servico = row[servicoIndex] || "Outros";
+        if (!counts[sprint]) counts[sprint] = {};
+        if (!counts[sprint][servico]) counts[sprint][servico] = 0;
+        counts[sprint][servico]++;
+      });
+
+const sprints = Object.keys(counts).sort((a, b) => {
+  const getNumber = str => parseInt(str.match(/\d+/)) || 0;
+  return getNumber(b) - getNumber(a);
+});
+
+
+
+ // Garante que apenas os serviços definidos em fixedColors sejam usados
+let servicos = Array.from(new Set(Object.values(counts).flatMap(obj => Object.keys(obj))))
+  .filter(s => fixedColors.hasOwnProperty(s));
+
+// Garante que "Outros" esteja por último, se presente
+if (servicos.includes("Outros")) {
+  servicos = servicos.filter(s => s !== "Outros");
+  servicos.push("Outros");
+}
+
+// Cria os datasets com as cores fixas
+const datasets = servicos.map(servico => ({
+  label: servico,
+  data: sprints.map(sprint => counts[sprint][servico] || 0),
+  backgroundColor: fixedColors[servico]
+}));
+
+      const ctx = document.getElementById('chart').getContext('2d');
+      new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: sprints,
+          datasets: datasets
+        },
+        options: {
+          indexAxis: 'y',
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              position: 'bottom',
+              labels: {
+                boxWidth: 20
+              }
+            },
+            title: {
+              display: true,
+              text: 'Chamados Externo por (Serviços Solicitados)',
+              color: '#0d402d',
+              font: {
+                size: 20
+              },
+              padding: {
+                top: 10,
+                bottom: 20
+              }
+            }
+          },
+          scales: {
+            x: {
+              stacked: true,
+              beginAtZero: true
+            },
+            y: {
+              stacked: true
+            }
+          }
+        }
+      });
+    }
+
+    function getRandomColor() {
+      const letters = '0123456789ABCDEF';
+      let color = '#';
+      for (let i = 0; i < 6; i++) {
+        color += letters[Math.floor(Math.random() * 16)];
+      }
+      return color;
+    }
+  </script>
+</body>
+</html>
