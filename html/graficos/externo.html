@@ -47,15 +47,19 @@
     const range = 'Externo';
     const apiUrl = `https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/${range}?key=${apiKey}`;
 
-    const fixedColors = {
-      "Acesso ao Portal": "#172A3A",
-      "Certificadora": "#228C6E",
-      "Subida de Operação": "#F7B801",
-      "Portal (Dúvidas)": "#F18701",
-      "Apresentação do Portal": "#F69200",
+   const fixedColors = {
+      "Acesso ao Portal": "#3a86ff",
+      "Certificadora": "#2a9d8f",
+      "Subida de Operação": "#ffdd57",
+      "Portal (Dúvidas)": "#faa307",
+      "Apresentação do Portal": "#f3722c",
       "Arquivos": "#76B041",
-      "Outros": "#545c34",
-      "Homologação": "#944317"
+      "Outros": "#adb5bd",
+      "Homologação": "#8338ec",
+	  "Memorial de Cálculo": "#277da1",
+	  "API": "#70c1b3",
+	  "Arquivos (Retorno, Remessa, Boleto e Xml)": "#43aa8b"
+
     };
 
     fetch(apiUrl)
