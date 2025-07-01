@@ -1,0 +1,302 @@
+/* Configuração geral */
+body {
+    background: linear-gradient(120deg, #f0f4f8, #d9e8dc);
+    margin: 0;
+    padding: 0;
+    font-family: 'Roboto', sans-serif;
+    color: #333;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    min-height: 100vh;
+}
+
+/* Título e logo */
+.titulo {
+    width: 100%;
+    padding: 20px;
+    background: linear-gradient(90deg, #022909, #0d402d);
+    color: #acf3f3;
+	height: 50px;
+    text-align: center; 
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+    position: relative; /* Adicionado para posicionamento relativo */
+}
+
+.back-button {
+    width: auto;
+    position: absolute; /* Adicionado para posicionamento no canto */
+    top: 50%;
+    right: 120px; /* Ajuste conforme necessário */
+    transform: translateY(-50%);
+    background: #0d402d;
+    color: #acf3f3;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background 0.3s ease;
+}
+
+.back-button:hover {
+    background: #07301e;
+}
+
+.logo {
+    width: 50px;
+    height: auto;
+}
+
+/* Área principal */
+.main-content {
+    width: 90%;
+    max-width: 1600px;
+    margin: 20px auto;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    background: #ffffff;
+    padding: 20px;
+}
+
+/* Filtros */
+.filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    justify-content: center; /* Centraliza os grupos de filtros horizontalmente */
+    padding-bottom: 20px;
+}
+
+.filter-group {
+    display: flex;
+    flex-direction: column; /* Alinha os elementos verticalmente dentro de cada grupo */
+    align-items: center; /* Centraliza o conteúdo do grupo (label e input) horizontalmente */
+    flex: 1;
+    min-width: 200px;
+    margin-bottom: 10px;
+}
+
+label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 5px;
+    text-align: center; /* Centraliza o texto da label */
+}
+
+input {
+    width: 100%; /* Garante que o input ocupe todo o espaço disponível no grupo */
+    max-width: 380px; /* Define um tamanho máximo para evitar inputs muito largos */
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+    text-align: center; /* Centraliza o texto dentro do input */
+}
+
+
+/* Tabela */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: #ffffff;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+thead {
+    background: #0d402d;
+    color: #acf3f3;
+    text-align: left;
+}
+
+th, td {
+    padding: 15px;
+    text-align: center;
+    border-bottom: 1px solid #ddd;
+}
+
+tbody tr:nth-child(even) {
+    background: #f9f9f9;
+}
+
+tbody tr:hover {
+    background: #eaf5f3;
+}
+
+button {
+    padding: 5px 10px;
+    border: none;
+    border-radius: 0px;
+    font-size: 14px;
+    cursor: pointer;
+    margin: 0 5px;
+    transition: background-color 0.3s ease;
+    height: 35px;
+    width: 40px;
+}
+
+button:hover {
+    background-color: #e0e0e0;
+}
+
+button:nth-child(1):hover {
+    background-color: #0056b3;
+}
+
+button:nth-child(2):hover {
+    background-color: #a71d2a;
+}
+.card {
+			font-size: 1.2em;
+			text-align: center;
+            width: 200px;
+            padding: 20px;
+            margin: 10px;
+            box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s;
+	color: #0c442c;
+        }
+		  .card:hover {
+            transform: scale(1.05);
+        }
+
+        .card a {
+            text-decoration: none;
+            color: #0c442c;
+            font-weight: bold;
+        }
+
+        .card a:hover {
+		color: #0c442c; }
+			
+			
+/* Botão para visualizar sprints antigas */
+
+.view-sprint-button {
+	  padding: 5px 10px;
+    border: none;
+    border-radius: 0px;
+    font-size: 14px;
+    cursor: pointer;
+    margin: 0 5px;
+    transition: background-color 0.3s ease;
+    height: 35px;
+    width: 150px;
+	 margin-left: auto;
+    margin-right: auto;
+}
+
+
+.view-sprint-button:hover {
+    background-color: #e0e0e0;
+}
+
+.view-sprint-button:nth-child(1):hover {
+    background-color: #0056b3;
+}
+
+.view-sprint-button:nth-child(2):hover {
+background-color: #a71d2a;}
+
+
+h2 {
+    text-align: center;
+    color: #0d402d;
+    font-weight: bold;
+    margin-top: 20px;
+	size: 20px;
+}
+
+
+
+.main-content1 {
+    width: 90%;
+    max-width: 1400px;
+	margin-top: 5px;
+	height: 770px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    background: #ffffff;
+    padding: 20px;
+}
+
+
+.menu11 {
+	width: 100%;
+	margin-top: 0px;
+    text-align: center;
+    padding: 40px;
+    max-width: 1500px;
+	height: 15px;
+}
+
+
+        .op {
+			font-size: 1.2em;
+            background-color: #d9e8dc;
+            width:210px;
+            padding: 13px;
+            transition: transform 0.3s;
+			display: inline-block;
+			margin: 0px;
+        }
+
+        .op:hover {
+            transform: scale(1.05);
+		color: #0d402d;
+		background-color: #99C1A1;;
+        }
+
+        .op a {
+            text-decoration: none;
+            color: #0d402d;
+            font-weight: bold;
+        }
+
+        .op a:hover {
+		color: #0d402d;
+		}
+		
+		.op.selected {
+    background-color: #0d402d;
+    color: #acf3f3;
+}
+
+.op.selected a {
+    color: #acf3f3;
+}
+.main-content2 {
+    width: 100%;
+    max-width: 1600px;
+	margin-top: 5px;
+height: 1000px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    background: #ffffff;
+    padding: 20px;
+}
+
+op {
+	display: inline-block;
+
+}
+
+  #chart {
+    width: 1300px !important;
+    height: 600px !important;
+  }

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chamados</title>
+    <link rel="icon" type="logo1/png" href="img/logo1.png">
+   <link rel="stylesheet" href="css/index.css">
+</head>
+<body>
+<img src="img/logo1.png" alt="Logo" class="logo">
+    <div class="container">
+        <h1>Chamados</h1>
+
+        <div class="card">
+            <a href="html/externo.html">Cadastrar Chamado</a>
+        </div>
+
+        <div class="card">
+            <a href="html/exibirext.html">Visualizar Chamados</a>
+        </div>
+        <div class="card">
+            <a href="html/adccedente.html">Cadastrar Cedente</a>
+        </div>
+        <div class="card">
+            <a href="html/Graficos/total.html">Gráficos</a>
+        </div>
+		 <div class="card">
+            <a href="html/exibircont.html">Contatos</a>
+        </div>
+    </div>
+
+    <button class="login-button" onclick="window.location.href='html/acesso.html'">Login</button>
+
+    <script>
+        document.querySelectorAll('.card a').forEach(link => {
+            link.addEventListener('click', (e) => {
+                console.log(`Navegando para: ${e.target.href}`);
+            });
+        });
+    </script>
+
+    <style>
+        .login-button {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: #7C8C6C;
+            color: #acf3f3;
+            font-size: 1em;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+            transition: background-color 0.3s;
+        }
+
+        .login-button:hover {
+            background-color: #6A7C5C;
+        }
+    </style>
+</body>
+</html>
