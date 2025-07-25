@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chamados</title>
+    <link rel="icon" type="logo1/png" href="../img/logo1.png">
+    <link rel="stylesheet" href="../css/index.css">
+    <style>
+        .login-button {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: #7C8C6C;
+            color: #acf3f3;
+            font-size: 1em;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+            transition: background-color 0.3s;
+        }
+
+        .login-button:hover {
+            background-color: #6A7C5C;
+        }
+
+        .top-bar {
+            position: absolute;
+            top: 10px;
+            right: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-family: Arial, sans-serif;
+            font-size: 16px;
+        }
+
+        .top-bar button {
+            background-color: #7C8C6C;
+            color: #fff;
+            border: none;
+            padding: 5px 12px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .top-bar button:hover {
+            background-color: #6A7C5C;
+        }
+
+        #nomeDisplay {
+            color: #0c442c;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+<div class="top-bar">
+    <span id="user-logado"></span>
+    <p><strong id="nomeDisplay"></strong></p>
+    <button onclick="logout()">Sair</button>
+</div>
+
+<img src="../img/logo1.png" alt="Logo" class="logo">
+
+<div class="container">
+    <h1>Chamados</h1>
+
+    <div class="card">
+        <a href="externo.html">Cadastrar Chamado</a>
+    </div>
+
+    <div class="card">
+        <a href="exibirext.html">Visualizar Chamados</a>
+    </div>
+
+    <div class="card">
+        <a href="adccedente.html">Cadastrar Cedente</a>
+    </div>
+
+    <div class="card">
+        <a href="graficos/total.html">Gráficos</a>
+    </div>
+
+    <div class="card">
+        <a href="exibircont.html">Contatos</a>
+    </div>
+</div>
+
+<script>
+    document.querySelectorAll('.card a').forEach(link => {
+        link.addEventListener('click', (e) => {
+            console.log(`Navegando para: ${e.target.href}`);
+        });
+    });
+
+    function logout() {
+        localStorage.removeItem("usuarioLogado");
+        window.location.href = "../index.html"; // ajuste se necessário
+    }
+
+    function capitalizarNome(nome) {
+        if (!nome) return "Desconhecido";
+        return nome.charAt(0).toUpperCase() + nome.slice(1);
+    }
+
+    function mostrarUsuarioLogado() {
+        const usuario = localStorage.getItem("usuarioLogado");
+        const nomeFormatado = capitalizarNome(usuario);
+        document.getElementById("nomeDisplay").textContent = nomeFormatado;
+    }
+
+    window.onload = () => {
+        if (typeof carregarNovosCedentes === "function") carregarNovosCedentes();
+        if (typeof preencherResponsavelLogado === "function") preencherResponsavelLogado();
+        mostrarUsuarioLogado();
+    };
+</script>
+
+</body>
+</html>

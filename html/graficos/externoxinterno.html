@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gráficos</title>
+	<link rel="icon" type="logo1/png" href="../../img/logo1.png">
+    <link rel="stylesheet" href="../../css/exibir.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+<div class="titulo">
+    <img src="../../img/logo2.png" alt="Logo" class="logo">
+    <h1>Gráficos</h1>
+     <button class="back-button" onclick="window.location.href='../inicio.html';">Voltar</button>
+</div>
+<div class="menu11">
+     <div class="op">
+  <a href="total.html">Total de Chamados</a>
+</div>
+
+        <div class="op selected">
+            <a href="externoxinterno.html">Externo x Interno</a>
+        </div>
+        <div class="op">
+            <a href="responsavel.html">Responsável</a>
+        </div>
+        <div class="op">
+            <a href="externo.html">Externo - Serviço</a>
+        </div>
+        <div class="op">
+            <a href="interno.html">Interno - Sistemas</a>
+        </div>
+		<div class="op"><a href="causainterno.html">Causas</a></div>
+</div>
+
+<div class="main-content1">
+
+
+    <h2>Chamados Internos e Externos por Sprint</h2>
+    <canvas id="comparacaoPorSprintChart"></canvas>
+</div>
+
+<script>
+    const sheetId = '1vzQ932VhryQLJV7j1aMYsOYLqBUKifJ_E9SKXrzbkD8';
+    const apiKey = 'AIzaSyA-aZjrMoRGcyuIlO-RbtaaFOZRHA4YGww';
+    const ranges = ['Interno', 'Externo'];
+
+    Promise.all(
+        ranges.map(range =>
+            fetch(`https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/${range}?key=${apiKey}`)
+                .then(res => res.json())
+                .then(json => ({ range, values: json.values || [] }))
+        )
+    ).then(results => {
+        const dataInterno = results.find(r => r.range === 'Interno').values;
+        const dataExterno = results.find(r => r.range === 'Externo').values;
+
+        processSprintsData(dataInterno, dataExterno);
+    }).catch(error => {
+        console.error('Erro ao buscar dados:', error);
+    });
+
+    function processSprintsData(dataInterno, dataExterno) {
+        const headersInterno = dataInterno[0];
+        const headersExterno = dataExterno[0];
+        const sprintIndexInterno = headersInterno.indexOf("Sprint");
+        const sprintIndexExterno = headersExterno.indexOf("Sprint");
+
+        const countPorSprint = {};
+        const internosPorSprint = {};
+        const externosPorSprint = {};
+
+        dataInterno.slice(1).forEach(row => {
+            const sprint = row[sprintIndexInterno] || "Sem Sprint";
+            countPorSprint[sprint] = (countPorSprint[sprint] || 0) + 1;
+            internosPorSprint[sprint] = (internosPorSprint[sprint] || 0) + 1;
+        });
+
+        dataExterno.slice(1).forEach(row => {
+            const sprint = row[sprintIndexExterno] || "Sem Sprint";
+            countPorSprint[sprint] = (countPorSprint[sprint] || 0) + 1;
+            externosPorSprint[sprint] = (externosPorSprint[sprint] || 0) + 1;
+        });
+
+        const sprints = Object.keys(countPorSprint).sort((a, b) => {
+    const getNumber = str => parseInt(str.match(/\d+/)) || 0;
+    return getNumber(a) - getNumber(b);
+});
+
+
+        // Gráfico 2: Interno x Externo por Sprint
+        const internos = sprints.map(s => internosPorSprint[s] || 0);
+        const externos = sprints.map(s => externosPorSprint[s] || 0);
+
+        new Chart(document.getElementById('comparacaoPorSprintChart'), {
+            type: 'bar',
+            data: {
+                labels: sprints,
+                datasets: [
+                    {
+                        label: 'Interno',
+                        data: internos,
+                        backgroundColor: 'rgba(75, 192, 192, 0.6)'
+                    },
+                    {
+                        label: 'Externo',
+                        data: externos,
+                        backgroundColor: 'rgba(255, 99, 132, 0.6)'
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: { beginAtZero: true }
+                }
+            }
+        });
+    }
+</script>
+</body>
+</html>

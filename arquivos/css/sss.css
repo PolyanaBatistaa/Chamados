@@ -1,0 +1,158 @@
+body {
+    background-color: #F2E3B3;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    height: 100vh;
+	font-family: Arial, sans-serif;  
+	color: #0D402D;
+
+}
+
+.logo {
+    position: absolute;
+    top: 25px;
+    left: 15px;
+    width: 100px;
+    height: auto;
+}
+
+.titulo {
+    position: absolute; /* Para ficar fixo no topo da página */
+    top: 0; /* Fixa o elemento no topo */
+    left: 0; /* Garante que o elemento ocupe toda a largura */
+    width: 100%; /* Faz com que ocupe toda a largura da tela */
+    height: 150px; /* Define a altura do título */
+    background-color: #022909; /* Cor de fundo */
+    margin-top: 0; /* Remove o espaçamento superior */
+    display: flex; /* Usa flexbox para centralizar conteúdo, caso necessário */
+    justify-content: center; /* Alinha o conteúdo no centro */
+    align-items: center; /* Alinha o conteúdo no centro verticalmente */
+    color: #acf3f3; /* Cor do texto dentro da seção */
+	margin-top: auto; /* Remove o espaçamento superior */
+
+}
+
+/* Estilização da tabela */
+.main-content {
+    width: 100%; /* Faz com que o contêiner ocupe toda a largura */
+    max-width: 1200px; /* Limita a largura máxima da tabela */
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Centraliza o conteúdo */
+    margin-top: 250px; /* Ajuste de margem conforme necessário */
+    gap: 10px; /* Espaço entre filtros e tabela */
+}
+
+/* Filtros */
+.filters {
+    position: absolute; /* Para ficar fixo no topo da página */
+    top: 170px; /* Fixa o elemento no topo */
+    left: 25%; /* Garante que o elemento ocupe toda a largura */
+    width: calc(100% - 80px); /* Ajuste para preencher a largura com margem */
+}
+
+/* Estilos dos filtros */
+.filters label {
+    width: 100%;
+    font-weight: bold;
+    color: #0D402D;
+}
+
+.filters input {
+    flex: 1; /* Faz os inputs ocuparem espaço proporcional */
+    min-width: 200px; /* Define uma largura mínima */
+    padding: 10px;
+    border: 2px solid #7C8C6C;
+    border-radius: 5px;
+    background-color: #F2E3B3;
+    color: #0D402D;
+    font-size: 1em;
+}
+
+/* Estilo da tabela */
+table {
+    width: 100%;
+    border-collapse: collapse; /* Remove espaços entre as bordas das células */
+    background-color: #ffffff; /* Cor de fundo da tabela */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Sombra sutil */
+    border-radius: 5px; /* Bordas arredondadas */
+    overflow: hidden; /* Garante bordas consistentes */
+}
+
+/* Cabeçalho da tabela */
+thead {
+    background-color: #0D402D; /* Cor de fundo do cabeçalho */
+   color: #ACF2EB;
+    text-align: center; /* Alinhamento do texto */
+	
+}
+
+thead th {
+    padding: 10px; /* Espaçamento interno nas células do cabeçalho */
+    font-size: 1em;
+    font-weight: bold;
+
+}
+
+/* Corpo da tabela */
+tbody tr:nth-child(even) {
+    background-color: #F2E3B3; /* Cor alternada para linhas pares */
+}
+
+tbody tr:nth-child(odd) {
+    background-color: #F2E3B3; /* Cor para linhas ímpares */
+}
+
+tbody td {
+    padding: 8px 10px; /* Espaçamento interno nas células */
+    color: #0D402D; /* Cor do texto */
+	text-align: center;
+    border-bottom: 1px solid #ccc; /* Linha divisória entre células */
+}
+
+/* Foco ao passar o mouse */
+tbody tr:hover {
+    background-color: #d7dbd3; /* Cor de fundo ao passar o mouse */
+}
+table tbody tr:hover {
+    background-color: #ACF2EB;
+    color: #0D402D;
+    cursor: pointer;
+}
+
+/* Bordas das células */
+th, td {
+    border: 1px solid #7C8C6C; /* Bordas das células */
+}
+
+/* Ajuste para rolagem horizontal, se necessário */
+table {
+    overflow-x: auto;
+    display: block;
+    margin-top: 20px; /* Ajuste o espaçamento da tabela conforme necessário */
+}
+
+
+.filter-inputs {
+    display: flex;
+    flex-direction: column;
+    gap: 10px; /* Espaço entre os campos de entrada */
+}
+.back-button {
+    padding: 10px 20px;
+    background-color: #0D402D;
+    color: #acf3f3;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1em;
+    font-weight: bold;
+	margin-left: 150px;	
+}
+
+.back-button:hover {
+    background-color: #07301E;
+}

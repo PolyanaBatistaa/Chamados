@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Gráficos</title>
+  <link rel="icon" type="image/png" href="../../img/logo1.png">
+  <link rel="stylesheet" href="../../css/exibir.css">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet"/>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
+  <style>
+    .filtros {
+      display: flex;
+      gap: 20px;
+      margin-bottom: 20px;
+      align-items: center;
+    }
+
+    .filtros label {
+      font-size: 0.95rem;
+      cursor: pointer;
+    }
+
+    canvas {
+      max-width: 100%;
+    }
+  </style>
+</head>
+<body>
+  <div class="titulo">
+    <img src="../../img/logo2.png" alt="Logo" class="logo">
+    <h1>Gráficos</h1>
+ <button class="back-button" onclick="window.location.href='../inicio.html';">Voltar</button>
+  </div>
+
+  <div class="menu11">
+    <div class="op"><a href="total.html">Total de Chamados</a></div>
+    <div class="op"><a href="externoxinterno.html">Externo x Interno</a></div>
+    <div class="op"><a href="responsavel.html">Responsável</a></div>
+    <div class="op"><a href="externo.html">Externo - Serviço</a></div>
+    <div class="op"><a href="interno.html">Interno - Sistemas</a></div>
+    <div class="op selected"><a href="causainterno.html">Causas</a></div>
+  </div>
+
+  <div class="main-content1">
+    <h2>Causas por Sprint</h2>
+    <div class="filtros">
+      <label><input type="radio" name="fonte" value="Interno" checked> Interno</label>
+      <label><input type="radio" name="fonte" value="Externo"> Externo</label>
+    </div>
+
+    <canvas id="chart"></canvas>
+  </div>
+
+  <script>
+
+    const sheetId = '1vzQ932VhryQLJV7j1aMYsOYLqBUKifJ_E9SKXrzbkD8';
+    const apiKey = 'AIzaSyA-aZjrMoRGcyuIlO-RbtaaFOZRHA4YGww';
+    const chartCanvas = document.getElementById('chart').getContext('2d');
+    let chartInstance;
+
+    // Carregar os dados ao iniciar
+    carregarDados('Interno');
+
+    // Alterar gráfico ao trocar o radio button
+    document.querySelectorAll('input[name="fonte"]').forEach(radio => {
+      radio.addEventListener('change', () => {
+        carregarDados(radio.value);
+      });
+    });
+
+    function carregarDados(abaSelecionada) {
+      const url = `https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/${abaSelecionada}?key=${apiKey}`;
+      fetch(url)
+        .then(response => response.json())
+        .then(data => {
+          if (data.values) {
+            processarDados(data.values);
+          } else {
+            console.error("Nenhum dado encontrado.");
+          }
+        })
+        .catch(error => console.error("Erro na API:", error));
+    }
+
+    function processarDados(linhas) {
+      const headers = linhas[0];
+      const sprintIdx = headers.findIndex(h => h.trim().toLowerCase() === "sprint");
+      const causaIdx = headers.findIndex(h => h.trim().toLowerCase() === "causa");
+
+      if (sprintIdx === -1 || causaIdx === -1) {
+        console.error("Colunas 'Sprint' ou 'Causa' não encontradas.");
+        return;
+      }
+
+      const contagem = {};
+
+      linhas.slice(1).forEach(row => {
+        const sprint = row[sprintIdx]?.trim();
+        const causa = row[causaIdx]?.trim();
+        if (!sprint || !causa) return;
+
+        if (!contagem[sprint]) contagem[sprint] = {};
+        if (!contagem[sprint][causa]) contagem[sprint][causa] = 0;
+        contagem[sprint][causa]++;
+      });
+
+      const sprints = Object.keys(contagem).sort();
+      const causas = Array.from(new Set(sprints.flatMap(s => Object.keys(contagem[s])))).sort();
+
+      const datasets = causas.map(causa => ({
+        label: causa,
+        data: sprints.map(sprint => {
+          const total = Object.values(contagem[sprint]).reduce((a, b) => a + b, 0);
+          const valor = contagem[sprint][causa] || 0;
+          return {
+            x: sprint,
+            y: (valor / total * 100),
+            raw: valor
+          };
+        }),
+        backgroundColor: corFixa(causa)
+      }));
+
+      renderChart(sprints, datasets);
+    }
+
+    function renderChart(sprints, datasets) {
+      if (chartInstance) {
+        chartInstance.destroy();
+      }
+
+      chartInstance = new Chart(chartCanvas, {
+        type: 'bar',
+        data: {
+          labels: sprints,
+          datasets: datasets
+        },
+        options: {
+          responsive: true,
+          plugins: {
+            legend: {
+              position: 'top'
+            },
+            datalabels: {
+              color: 'black',
+              anchor: 'center',
+              align: 'center',
+              formatter: function(value) {
+                if (value.raw === 0) return '';
+                return `${value.raw} (${value.y.toFixed(1)}%)`;
+              }
+            }
+          },
+          scales: {
+            x: { stacked: true },
+            y: {
+              stacked: true,
+              beginAtZero: true,
+              max: 100,
+              title: {
+                display: true,
+                text: 'Porcentagem (%)'
+              }
+            }
+          }
+        },
+        plugins: [ChartDataLabels]
+      });
+    }
+
+    function corFixa(causa) {
+      const cores = {
+        "Erro Humano": "#FFA726",
+        "Erro Sistema": "#EF5350",
+        "Dúvida": "#42A5F5",
+        "Inconsistência Momentânea": "#66BB6A",
+        "Outro": "#BDBDBD"
+      };
+      return cores[causa] || '#' + Math.floor(Math.random() * 16777215).toString(16);
+    }
+  </script>
+</body>
+</html>

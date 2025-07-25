@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Graficos</title>
+    <link rel="stylesheet" href="../css/exibir.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+<div class="titulo">
+    <img src="../img/logo2.png" alt="Logo" class="logo">
+    <h1>CHAMADOS TOTAIS POR RESPONSÁVEL E SPRINT</h1>
+    <button class="back-button" onclick="window.location.href='interno.html';">Voltar</button>
+</div>
+
+<div class="main-content">
+    <canvas id="unicoGrafico"></canvas>
+</div>
+
+<script>
+    const sheetId = '1vzQ932VhryQLJV7j1aMYsOYLqBUKifJ_E9SKXrzbkD8';
+    const apiKey = 'AIzaSyA-aZjrMoRGcyuIlO-RbtaaFOZRHA4YGww';
+    const ranges = ['Interno', 'Externo'];
+
+    Promise.all(
+        ranges.map(range =>
+            fetch(`https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/${range}?key=${apiKey}`)
+                .then(res => res.json())
+                .then(json => ({ range, values: json.values || [] }))
+        )
+    ).then(results => {
+        const dataInterno = results.find(r => r.range === 'Interno').values;
+        const dataExterno = results.find(r => r.range === 'Externo').values;
+        processUnicoGrafico(dataInterno, dataExterno);
+    }).catch(error => {
+        console.error('Erro ao buscar dados:', error);
+    });
+
+    function processUnicoGrafico(dataInterno, dataExterno) {
+        const headersI = dataInterno[0];
+        const headersE = dataExterno[0];
+        const sprintIndexI = headersI.indexOf("Sprint");
+        const responsavelIndexI = headersI.indexOf("Responsável");
+        const sprintIndexE = headersE.indexOf("Sprint");
+        const responsavelIndexE = headersE.indexOf("Responsável");
+
+        const dados = {}; // {Sprint: {Responsável: totalChamados}}
+
+        function formatarResponsavel(nome) {
+            return (nome || "Não informado").trim();
+        }
+
+        function acumular(origem, sprintIndex, responsavelIndex) {
+            origem.slice(1).forEach(row => {
+                const sprint = row[sprintIndex] || "Sem Sprint";
+                const responsavel = formatarResponsavel(row[responsavelIndex]);
+                if (!dados[sprint]) dados[sprint] = {};
+                if (!dados[sprint][responsavel]) dados[sprint][responsavel] = 0;
+                dados[sprint][responsavel]++;
+            });
+        }
+
+        acumular(dataInterno, sprintIndexI, responsavelIndexI);
+        acumular(dataExterno, sprintIndexE, responsavelIndexE);
+
+        const sprints = Object.keys(dados).sort();
+        const responsaveis = Array.from(new Set(
+            Object.values(dados).flatMap(sprintData => Object.keys(sprintData))
+        )).sort();
+
+        const cores = {
+            Bruno: '#003fba',
+            Hellen: '#9b59b6',
+            Laura: '#ff7f7f',
+            Luan: '#ffd700',
+            Polyana: '#2ecc71',
+            Fernando: '#9acd32',
+            Thaynan: '#b8860b',
+            "Não informado": '#cccccc'
+        };
+
+        const datasets = responsaveis.map(responsavel => ({
+            label: responsavel,
+            data: sprints.map(sprint => dados[sprint][responsavel] || 0),
+            backgroundColor: cores[responsavel] || '#999999'
+        }));
+
+        new Chart(document.getElementById('unicoGrafico').getContext('2d'), {
+            type: 'bar',
+            data: {
+                labels: sprints,
+                datasets: datasets
+            },
+            options: {
+                indexAxis: 'y',
+                responsive: true,
+                plugins: {
+                    legend: { position: 'top' },
+                    tooltip: {
+                        mode: 'nearest',
+                        intersect: true,
+                        callbacks: {
+                            label: function(context) {
+                                const label = context.dataset.label || '';
+                                const value = context.raw || 0;
+                                return `${label}: ${value}`;
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    x: {
+                        beginAtZero: true,
+                        stacked: true
+                    },
+                    y: {
+                        stacked: true
+                    }
+                }
+            }
+        });
+    }
+</script>
+</body>
+</html>

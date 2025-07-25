@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chamados</title>
+    <link rel="icon" type="logo1/png" href="../img/logo1.png">
+    <link rel="stylesheet" href="../css/form.css">
+    <script>
+        // Função para adicionar cedentes ao localStorage
+        function adicionarCedente(event) {
+            event.preventDefault();
+            const nomeCedente = document.getElementById("nomeCedente").value.trim();
+            const cnpjCedente = document.getElementById("cnpjCedente").value.trim();
+
+            if (nomeCedente && cnpjCedente) {
+                const novosCedentes = JSON.parse(localStorage.getItem("novosCedentes") || "[]");
+                novosCedentes.push({ nome: nomeCedente, cnpj: cnpjCedente });
+                localStorage.setItem("novosCedentes", JSON.stringify(novosCedentes));
+                alert("Cedente adicionado com sucesso!");
+                document.getElementById("cedenteForm").reset();
+            } else {
+                alert("Por favor, preencha todos os campos.");
+            }
+        }
+    </script>
+</head>
+<body>
+    <div class="titulo">
+        <img src="../img/logo2.png" alt="Logo" class="logo">
+        <h1>Adicionar Cedente</h1>
+    </div>
+    <div class="form-container">
+        <form id="cedenteForm" onsubmit="adicionarCedente(event)">
+            <div class="form-group">
+                <label for="nomeCedente">Nome do Cedente:</label>
+                <input type="text" id="nomeCedente" name="nomeCedente" placeholder="Digite o nome do cedente" required>
+            </div>
+            <div class="form-group">
+                <label for="cnpjCedente">CNPJ do Cedente:</label>
+                <input type="text" id="cnpjCedente" name="cnpjCedente" placeholder="Digite o CNPJ do cedente" required>
+            </div>
+            <button type="submit">Adicionar Cedente</button>
+			<button type="button" onclick="window.location.href='inicio.html';">Voltar</button>
+        </form>
+    </div>
+
+
+</body>
+</html>

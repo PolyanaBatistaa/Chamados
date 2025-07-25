@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Login - Chamados</title>
+  <link rel="stylesheet" href="css/index.css">
+  <style>
+  body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background-color: #F2F2F2;
+      color: #0D402D;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+  }
+
+  .login-container {
+      background-color: #0c442c;
+      padding: 40px;
+      border-radius: 10px;
+      max-width: 400px;
+      width: 100%;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+  }
+
+  h1 {
+      font-size: 2.5em;
+      margin-bottom: 20px;
+      color: #acf3f3;
+  }
+
+  input[type="text"], input[type="password"] {
+      width: 90%;
+      padding: 10px;
+      margin: 10px 0;
+      border: 2px solid #7C8C6C;
+      border-radius: 5px;
+      font-size: 1em;
+  }
+
+  button {
+      background-color: #7C8C6C;
+      color: #acf3f3;
+      font-size: 1.2em;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+      margin-top: 10px;
+  }
+
+  button:hover {
+      background-color: #6A7C5C;
+  }
+
+  .error {
+    color: red;
+    margin-top: 10px;
+  }
+</style>
+</head>
+<body>
+<img src="img/logo1.png" alt="Logo" class="logo">
+  <div class="login-container">
+    <h1>Login</h1>
+    <input type="text" id="username" placeholder="Usuário" />
+    <input type="password" id="password" placeholder="Senha" />
+    <button onclick="login()">Entrar</button>
+    <div class="error" id="error-message"></div>
+  </div>
+
+  <script>
+    function login() {
+      const username = document.getElementById("username").value.trim().toLowerCase();
+      const password = document.getElementById("password").value;
+
+      const users = {
+        polyana: "Senha89252310",
+        hellen: "1234",
+        luan: "Tavares00214_",
+        laura: "laura123"
+      };
+
+      if (users[username] === password) {
+        const capitalizedUsername = username.charAt(0).toUpperCase() + username.slice(1);
+        localStorage.setItem("usuarioLogado", capitalizedUsername);
+        window.location.href = "html/inicio.html";
+      } else {
+        document.getElementById("error-message").textContent = "Usuário ou senha inválidos.";
+      }
+    }
+  </script>
+</body>
+</html>

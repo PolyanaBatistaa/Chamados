@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contatos</title>
+	 <link rel="icon" type="logo1/png" href="../img/logo1.png">
+    <link rel="stylesheet" href="../css/exibir.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+<div class="titulo">
+    <img src="../img/logo2.png" alt="Logo" class="logo">
+    <h1>Contatos</h1>
+    <button class="back-button" onclick="window.location.href='inicio.html';">Voltar</button>
+</div>
+<div class="main-content">
+    <div class="filters">
+        <div class="filter-group">
+            <label for="cedente">Filtrar por Cedente:</label>
+            <input type="text" id="cedente" placeholder="Digite o cedente" oninput="applyFilters()">
+        </div>
+		 <div class="card">
+            <a href="contatos.html">Cadastrar contato</a>
+        </div>
+    </div>
+    <div id="data"></div>
+</div>
+
+<script>
+    const sheetId = '1vzQ932VhryQLJV7j1aMYsOYLqBUKifJ_E9SKXrzbkD8'; // Substitua pelo ID da sua planilha
+    const apiKey = 'AIzaSyA-aZjrMoRGcyuIlO-RbtaaFOZRHA4YGww'; // Substitua pela sua chave de API
+    const range = 'Contatos'; // Nome da aba ou intervalo exato
+    const apiUrl = `https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/${range}?key=${apiKey}`;
+    
+    let originalData = [];
+
+    fetch(apiUrl)
+        .then(response => response.json())
+        .then(data => {
+            if (data.values) {
+                originalData = data.values;
+                renderTable(originalData);
+            } else {
+                console.error('Nenhum dado encontrado na planilha.');
+            }
+        })
+        .catch(error => console.error('Erro ao buscar dados:', error));
+
+    function renderTable(data) {
+        let html = '<table>';
+        html += '<thead><tr>';
+        data[0].forEach(header => {
+            html += `<th>${header}</th>`;
+        });
+        html += '</tr></thead><tbody>';
+
+        data.slice(1).forEach(row => {
+            html += '<tr>';
+            row.forEach(cell => {
+                html += `<td>${cell || 'N/A'}</td>`;
+            });
+            html += '</tr>';
+        });
+
+        html += '</tbody></table>';
+        document.getElementById('data').innerHTML = html;
+    }
+
+    function applyFilters() {
+        const cedenteFilter = document.getElementById('cedente').value.toLowerCase();
+
+        const headers = originalData[0]; // Primeira linha contém os cabeçalhos
+        const cedenteIndex = headers.indexOf("Cedente");
+
+
+        const filteredData = originalData.filter((row, index) => {
+            if (index === 0) return true; // Mantém o cabeçalho
+            const cedenteMatches = cedenteFilter ? row[cedenteIndex]?.toLowerCase().includes(cedenteFilter) : true;
+            return cedenteMatches ;
+        });
+
+        renderTable(filteredData);
+    }
+</script>
+</body>
+</html>

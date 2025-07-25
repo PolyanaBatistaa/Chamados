@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Listar Local Storage</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: left;
+        }
+        th {
+            background-color: #f4f4f4;
+        }
+        button {
+            margin-top: 10px;
+        }
+    </style>
+    <script>
+        // Função para listar os itens do Local Storage
+        function listarLocalStorage() {
+            const tabela = document.getElementById('tabela-conteudo');
+            tabela.innerHTML = ''; // Limpa o conteúdo da tabela
+            
+            if (localStorage.length === 0) {
+                tabela.innerHTML = '<tr><td colspan="2">O Local Storage está vazio.</td></tr>';
+                return;
+            }
+
+            // Adiciona cada item do Local Storage na tabela
+            for (let i = 0; i < localStorage.length; i++) {
+                const chave = localStorage.key(i);
+                const valor = localStorage.getItem(chave);
+                tabela.innerHTML += `
+                    <tr>
+                        <td>${chave}</td>
+                        <td>${valor}</td>
+                    </tr>
+                `;
+            }
+        }
+
+        // Função para limpar o Local Storage
+        function limparLocalStorage() {
+            localStorage.clear();
+            alert('Local Storage limpo com sucesso!');
+            listarLocalStorage(); // Atualiza a lista
+        }
+
+        // Atualiza a lista ao carregar a página
+        window.onload = listarLocalStorage;
+    </script>
+</head>
+<body>
+    <h1>Itens do Local Storage</h1>
+    <button onclick="limparLocalStorage()">Limpar Local Storage</button>
+	<button type="button" onclick="window.location.href='../index.html';">Voltar</button>
+    <table>
+        <thead>
+            <tr>
+                <th>Chave</th>
+                <th>Valor</th>
+            </tr>
+        </thead>
+        <tbody id="tabela-conteudo">
+            <!-- Os itens do Local Storage serão inseridos aqui -->
+        </tbody>
+    </table>
+</body>
+</html>
