@@ -32,7 +32,7 @@
   <div class="titulo">
     <img src="../../img/logo2.png" alt="Logo" class="logo">
     <h1>Gráficos</h1>
- <button class="back-button" onclick="window.location.href='../inicio.html';">Voltar</button>
+    <button class="back-button" onclick="window.location.href='../../index.html';">Voltar</button>
   </div>
 
   <div class="menu11">
@@ -50,8 +50,8 @@
     <!-- Radio buttons posicionados dentro do container -->
     <div class="filtros">
       <strong>Selecionar Fonte:</strong>
-      <label><input type="radio" name="fonte" value="Interno" checked> Interno</label>
-      <label><input type="radio" name="fonte" value="Externo"> Externo</label>
+      <label><input type="radio" name="fonte" value="Externo"checked> Externo</label>
+	        <label><input type="radio" name="fonte" value="Interno" > Interno</label>
     </div>
 
     <canvas id="chart"></canvas>
@@ -153,16 +153,17 @@
       });
     }
 
-    function corFixa(causa) {
-      const cores = {
-        "Erro Humano": "#FFA726",
-        "Erro Sistema": "#EF5350",
-        "Dúvida": "#42A5F5",
-        "Inconsistência Momentânea": "#66BB6A",
-        "Outro": "#BDBDBD"
-      };
-      return cores[causa] || '#' + Math.floor(Math.random()*16777215).toString(16);
-    }
+function corFixa(causa) {
+  const cores = {
+    "Dúvida de Uso": "#5DADE2",              // Azul petróleo
+    "Erro Humano": "#F5B041",               // Laranja suave
+    "Erro do Sistema": "#EC7063",           // Vermelho coral
+    "Inconsistência Temporária": "#AF7AC5", // Roxo lavanda
+    "Solicitação Operacional": "#58D68D"    // Verde médio
+  };
+  return cores[causa] || "#BDBDBD"; // cinza padrão se não bater
+}
+
 
     carregarDados(); // Inicial
   </script>
